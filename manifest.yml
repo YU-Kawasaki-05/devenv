@@ -2,10 +2,28 @@
 # scripts/sync.sh and scripts/diff.sh resolve the profile from this file
 # (key = basename of the project directory).
 #
-# Add a project here once it has been migrated to a managed profile.
+# Conventions:
+#   <name>: <profile>          — managed project (synced from templates/<profile>/)
+#   # <name>: pending          — managed in future, blocked on something noted below
+#   # <name>: out of scope     — intentionally excluded; document the reason
+#
+# Projects in ~/marubo_ai (outside ~/develop/) are still resolvable here because
+# lookup uses the basename, not the full path.
 
 projects:
+  # --- managed (in sync) ---
   Ardors-website: docs-first-web
   schedule_app: docs-first-web
-  lifeapp: docs-first-web         # uses overrides/lifeapp/ for project-specific files
-  # jovin: pending — currently empty CLAUDE.md, decide profile after content review.
+
+  # --- managed with project-specific overrides ---
+  lifeapp: docs-first-web        # overrides/lifeapp/ keeps category-1 files
+  marubo_ai: docs-first-web      # overrides/marubo_ai/ keeps the project-specific CLAUDE.md
+
+  # --- pending: B (will be managed once conditions are met) ---
+  # jovin: docs-first-web        # CLAUDE.md is empty (0 lines) — re-evaluate when project takes shape
+
+  # --- out of scope: C (intentionally not managed) ---
+  # evs-AI-basedTestSpecificationCreation  — separate large multi-subproject system; doesn't fit docs-first-web profile
+  # univ                                   — personal academic notes; not an app project
+  # marubo_forPractice                     — sandbox/practice repo
+  # NoovaInc/erevista-ocr                  — different client/case, mostly empty for now

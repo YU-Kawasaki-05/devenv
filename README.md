@@ -76,10 +76,9 @@ scripts/sync.sh ../some_other_repo --profile docs-first-web --dry-run
 
 ## 既知の制約 / 今後の作業
 
-- `lifeapp` への実 sync は dry-run 検証のみ。実際の上書きはユーザー承認待ち (override 機構で 5 ファイルの固有版は保持される設計)。
-- `jovin` は CLAUDE.md が空。中身を確認してから profile を決める。
-- slide-gen は `~/.claude/skills/`、`~/.agents/skills/`、`develop/slide-gen/` の三重存在で、整理は次フェーズ。
-- `evs-AI...`, `univ`, `marubo_ai`, `marubo_forPractice`, `NoovaInc/` は未管理。
+- `lifeapp`, `marubo_ai` への実 sync は dry-run 検証のみ。実際の上書きはユーザー承認待ち (どちらも override で固有版を保持する設計)。
+- `jovin` は CLAUDE.md が空 → manifest に pending として明記。
+- `evs-AI...`, `univ`, `marubo_forPractice`, `NoovaInc/` は manifest に out of scope と明記。
 
 ## profile / overrides 一覧
 
@@ -88,3 +87,12 @@ scripts/sync.sh ../some_other_repo --profile docs-first-web --dry-run
 | Ardors-website | `docs-first-web` | なし |
 | schedule_app | `docs-first-web` | なし |
 | lifeapp | `docs-first-web` | `overrides/lifeapp/` (CLAUDE.md, AGENTS.md, .codex/config.toml, .codex/hooks/check_bash_command.py, .agents/skills/backend-bugfix/scripts/verify.sh) |
+| marubo_ai | `docs-first-web` | `overrides/marubo_ai/` (CLAUDE.md のみ) |
+
+## グローバル skills の慣習
+
+`~/.agents/skills/` 配下は `~/.claude/skills/` への symlink ファーム (Codex/別エージェント側からも同じ実体を共有)。新しいグローバル skill を追加するときは:
+```bash
+ln -s ~/.claude/skills/<skill-name> ~/.agents/skills/<skill-name>
+```
+で他ツール用にも参照を張る。
