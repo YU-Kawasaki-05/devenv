@@ -5,11 +5,12 @@
 #   scripts/sync.sh <project-path> [--dry-run] [--profile <name>]
 #
 # Behavior:
-#   - Resolves the profile from manifest.yml unless --profile is given.
-#   - Copies template files into the target project, OVERWRITING matching paths.
-#   - Does NOT delete files that exist only on the project side (safe-side default).
-#   - Does NOT touch files outside the template's path set
-#     (e.g. .claude/settings.local.json, source code, docs/, node_modules/).
+#   - Resolves profile from manifest.yml unless --profile is given.
+#   - Stages templates into a tmp dir, substitutes {{PROJECT_PATH}} /
+#     {{PROJECT_NAME}} in whitelisted extensions, then rsync to the target.
+#   - Copies (overwrites) matching paths only; unrelated files in the project
+#     (e.g. .claude/settings.local.json, source code, docs/) are untouched.
+#   - Files that exist only in the project are NOT deleted (safe-side).
 #   - --dry-run shows rsync's itemize-changes output without writing.
 
 set -euo pipefail
@@ -17,11 +18,10 @@ set -euo pipefail
 DEVENV_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TEMPLATES_DIR="$DEVENV_ROOT/templates"
 MANIFEST="$DEVENV_ROOT/manifest.yml"
+# shellcheck source=_lib.sh
+source "$DEVENV_ROOT/scripts/_lib.sh"
 
-usage() {
-  sed -n '2,15p' "$0"
-  exit 1
-}
+usage() { sed -n '2,16p' "$0"; exit 1; }
 
 DRY_RUN=0
 PROFILE=""
@@ -40,38 +40,19 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ -z "$TARGET" ]] && usage
-
-if [[ ! -d "$TARGET" ]]; then
-  echo "target not found: $TARGET" >&2
-  exit 1
-fi
+[[ ! -d "$TARGET" ]] && { echo "target not found: $TARGET" >&2; exit 1; }
 TARGET="$(cd "$TARGET" && pwd)"
 TARGET_NAME="$(basename "$TARGET")"
 
-# Resolve profile from manifest.yml when not given.
-# manifest.yml format (no external yaml parser required):
-#   projects:
-#     <name>: <profile>
-if [[ -z "$PROFILE" ]]; then
-  if [[ -f "$MANIFEST" ]]; then
-    PROFILE="$(awk -v name="$TARGET_NAME" '
-      /^projects:/ {in_p=1; next}
-      in_p && /^[^[:space:]]/ {in_p=0}
-      in_p && $1 == name":" {sub(/^[^:]+:[[:space:]]*/, ""); gsub(/["'\''[:space:]]/, ""); print; exit}
-    ' "$MANIFEST")"
-  fi
-fi
-
-if [[ -z "$PROFILE" ]]; then
-  echo "no profile resolved for '$TARGET_NAME'. pass --profile <name> or add to manifest.yml" >&2
-  exit 1
-fi
+[[ -z "$PROFILE" ]] && PROFILE="$(resolve_profile "$TARGET_NAME" "$MANIFEST")"
+[[ -z "$PROFILE" ]] && { echo "no profile resolved for '$TARGET_NAME'. pass --profile <name> or add to manifest.yml" >&2; exit 1; }
 
 SRC_DIR="$TEMPLATES_DIR/$PROFILE"
-if [[ ! -d "$SRC_DIR" ]]; then
-  echo "profile not found: $SRC_DIR" >&2
-  exit 1
-fi
+[[ ! -d "$SRC_DIR" ]] && { echo "profile not found: $SRC_DIR" >&2; exit 1; }
+
+STAGE_DIR="$(mktemp -d)"
+trap 'rm -rf "$STAGE_DIR"' EXIT
+stage_template "$SRC_DIR" "$STAGE_DIR" "$TARGET" "$TARGET_NAME"
 
 echo "==> sync"
 echo "    profile : $PROFILE"
@@ -80,14 +61,12 @@ echo "    target  : $TARGET"
 echo "    dry-run : $DRY_RUN"
 echo
 
-# Use rsync per top-level entry in template, so we only touch managed paths.
-# This avoids deleting unrelated project files even with future --delete.
 RSYNC_OPTS=(-a --itemize-changes)
 [[ $DRY_RUN -eq 1 ]] && RSYNC_OPTS+=(-n)
 
 shopt -s dotglob nullglob
 ANY_CHANGE=0
-for entry in "$SRC_DIR"/*; do
+for entry in "$STAGE_DIR"/*; do
   rel="$(basename "$entry")"
   if [[ -d "$entry" ]]; then
     out="$(rsync "${RSYNC_OPTS[@]}" "$entry/" "$TARGET/$rel/")"
@@ -102,11 +81,5 @@ for entry in "$SRC_DIR"/*; do
   fi
 done
 
-if [[ $ANY_CHANGE -eq 0 ]]; then
-  echo "no changes — target already matches profile."
-fi
-
-if [[ $DRY_RUN -eq 1 ]]; then
-  echo
-  echo "(dry-run: nothing was written)"
-fi
+[[ $ANY_CHANGE -eq 0 ]] && echo "no changes — target already matches profile."
+[[ $DRY_RUN -eq 1 ]] && { echo; echo "(dry-run: nothing was written)"; }
