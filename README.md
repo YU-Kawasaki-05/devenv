@@ -7,7 +7,7 @@
 ```
 devenv/
 ├── templates/
-│   └── <profile>/             # プロジェクトに配布される真実源
+│   └── <profile>/             # プロジェクトに配布される真実源 (base)
 │       ├── CLAUDE.md
 │       ├── AGENTS.md
 │       ├── .codex/
@@ -16,8 +16,11 @@ devenv/
 │       │   ├── config.toml
 │       │   └── hooks.json
 │       └── .agents/skills/    # 共通 skill 群 (SKILL.md + agents/ + references/)
+├── overrides/
+│   └── <project-name>/        # 任意。base 上に重ねるプロジェクト固有ファイル
 ├── scripts/
-│   ├── sync.sh                # templates/<profile>/ → 対象プロジェクト (一方向)
+│   ├── _lib.sh                # 共有ヘルパー (resolve_profile / stage_template)
+│   ├── sync.sh                # templates/<profile>/ + overrides/<project>/ → 対象 (一方向)
 │   └── diff.sh                # 差分確認
 ├── manifest.yml               # プロジェクト名 → profile 対応
 ├── CLAUDE.md / AGENTS.md      # この repo の作業指示
@@ -41,9 +44,29 @@ scripts/sync.sh ../Ardors-website                   # 実際に上書き
 ```
 
 挙動:
-- `templates/<profile>/` に存在するパスのみ touch する。プロジェクト固有のファイル (例: `.claude/settings.local.json`、`docs/`、ソースコード) には触らない。
+- `templates/<profile>/` を tmp に staging → `overrides/<project-name>/` があれば上に重ねる → トークン置換 → rsync。
+- `templates/<profile>/` か `overrides/<project>/` に存在するパスのみ touch する。プロジェクト固有のファイル (例: `.claude/settings.local.json`、`docs/`、ソースコード) には触らない。
 - プロジェクト側にしかないファイルは削除しない (安全側のデフォルト)。
 - `manifest.yml` に登録されていない project は `--profile <name>` で明示的に指定する。
+
+### Overrides (プロジェクト固有の上書き)
+
+base profile を共有しつつ、特定ファイルだけプロジェクト固有にしたい場合:
+
+```
+overrides/<project-name>/
+  CLAUDE.md                                   # base の CLAUDE.md を上書き
+  .codex/hooks/check_bash_command.py          # 特定 hook のみ別ロジック
+  .agents/skills/backend-bugfix/scripts/verify.sh  # サブディレクトリも可
+```
+
+挙動:
+- base を staging に展開した直後に、`overrides/<project-name>/` の内容が `cp -a` で同 staging に重ねコピーされる。**ファイル単位の上書き**であり、base に存在するが override にも存在するファイルだけが置換される。
+- override にだけ存在するファイルは追加配布される。
+- base にあって override にないファイルはそのまま base 版が使われる。
+- override 内のファイルにも `{{PROJECT_PATH}}` / `{{PROJECT_NAME}}` トークンが効く。
+
+例: `lifeapp` は `docs-first-web` profile を使いつつ、CLAUDE.md / AGENTS.md / config.toml / check_bash_command.py / backend-bugfix の verify.sh を `overrides/lifeapp/` で固有版に差し替える。
 
 ### 別プロファイルを当てる
 
@@ -53,13 +76,15 @@ scripts/sync.sh ../some_other_repo --profile docs-first-web --dry-run
 
 ## 既知の制約 / 今後の作業
 
-- `.codex/config.toml` 内の `[projects."/home/yukawasaki/develop/Ardors-website"]` がハードコード。schedule_app などにも同じパスが書かれている (元コピー時から)。今後トークン置換 (例: `{{PROJECT_PATH}}`) を入れて sync 時に置換する予定。
-- `lifeapp` は同じ skill 名を持つが drift 済み。docs-first-web に統合する前に差分解析が必要。
+- `lifeapp` への実 sync は dry-run 検証のみ。実際の上書きはユーザー承認待ち (override 機構で 5 ファイルの固有版は保持される設計)。
 - `jovin` は CLAUDE.md が空。中身を確認してから profile を決める。
 - slide-gen は `~/.claude/skills/`、`~/.agents/skills/`、`develop/slide-gen/` の三重存在で、整理は次フェーズ。
+- `evs-AI...`, `univ`, `marubo_ai`, `marubo_forPractice`, `NoovaInc/` は未管理。
 
-## profile 一覧
+## profile / overrides 一覧
 
-| profile | 用途 | 適用プロジェクト |
+| project | profile | overrides |
 |---|---|---|
-| `docs-first-web` | docs-first な Web プロジェクト共通 (Codex agents/hooks + 9 共通 skills) | Ardors-website, schedule_app |
+| Ardors-website | `docs-first-web` | なし |
+| schedule_app | `docs-first-web` | なし |
+| lifeapp | `docs-first-web` | `overrides/lifeapp/` (CLAUDE.md, AGENTS.md, .codex/config.toml, .codex/hooks/check_bash_command.py, .agents/skills/backend-bugfix/scripts/verify.sh) |

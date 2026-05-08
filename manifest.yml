@@ -7,5 +7,5 @@
 projects:
   Ardors-website: docs-first-web
   schedule_app: docs-first-web
-  # lifeapp: pending — drift analysis required before adopting docs-first-web.
+  lifeapp: docs-first-web         # uses overrides/lifeapp/ for project-specific files
   # jovin: pending — currently empty CLAUDE.md, decide profile after content review.

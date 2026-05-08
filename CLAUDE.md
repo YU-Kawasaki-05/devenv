@@ -12,9 +12,10 @@
 - `.claude/skills/` — プロジェクト固有 Skills（このリポジトリ）
 - `.agents/skills/` — Codex 用 Skills（このリポジトリ）
 - `.github/skills/` — GitHub Copilot 用 Skills（このリポジトリ）
-- `templates/<profile>/` — 配下の develop プロジェクトに配布する正本
+- `templates/<profile>/` — 配下の develop プロジェクトに配布する正本 (base)
+- `overrides/<project-name>/` — base 上に重ねるプロジェクト固有ファイル
 - `manifest.yml` — プロジェクト名 → profile の対応表
-- `scripts/sync.sh`, `scripts/diff.sh` — 配布・差分確認
+- `scripts/sync.sh`, `scripts/diff.sh` — 配布・差分確認 (`scripts/_lib.sh` から共有関数を読む)
 
 ## Templates / sync workflow
 - 各プロジェクトの `.codex/`, `.agents/skills/`, `CLAUDE.md`, `AGENTS.md` の真実源は `templates/<profile>/` に置く

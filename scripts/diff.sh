@@ -10,6 +10,7 @@ set -euo pipefail
 DEVENV_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TEMPLATES_DIR="$DEVENV_ROOT/templates"
 MANIFEST="$DEVENV_ROOT/manifest.yml"
+export DEVENV_OVERRIDES_DIR="$DEVENV_ROOT/overrides"
 # shellcheck source=_lib.sh
 source "$DEVENV_ROOT/scripts/_lib.sh"
 

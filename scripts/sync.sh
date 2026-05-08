@@ -18,6 +18,7 @@ set -euo pipefail
 DEVENV_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TEMPLATES_DIR="$DEVENV_ROOT/templates"
 MANIFEST="$DEVENV_ROOT/manifest.yml"
+export DEVENV_OVERRIDES_DIR="$DEVENV_ROOT/overrides"
 # shellcheck source=_lib.sh
 source "$DEVENV_ROOT/scripts/_lib.sh"
 
@@ -54,11 +55,15 @@ STAGE_DIR="$(mktemp -d)"
 trap 'rm -rf "$STAGE_DIR"' EXIT
 stage_template "$SRC_DIR" "$STAGE_DIR" "$TARGET" "$TARGET_NAME"
 
+OVERLAY_NOTE="(none)"
+[[ -d "$DEVENV_OVERRIDES_DIR/$TARGET_NAME" ]] && OVERLAY_NOTE="$DEVENV_OVERRIDES_DIR/$TARGET_NAME"
+
 echo "==> sync"
-echo "    profile : $PROFILE"
-echo "    source  : $SRC_DIR"
-echo "    target  : $TARGET"
-echo "    dry-run : $DRY_RUN"
+echo "    profile  : $PROFILE"
+echo "    source   : $SRC_DIR"
+echo "    overrides: $OVERLAY_NOTE"
+echo "    target   : $TARGET"
+echo "    dry-run  : $DRY_RUN"
 echo
 
 RSYNC_OPTS=(-a --itemize-changes)
