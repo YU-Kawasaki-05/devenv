@@ -1,0 +1,19 @@
+# Local-only Claude/Codex/IDE state
+.claude/settings.local.json
+.codex/.tmp/
+.codex/sessions/
+.codex/cache/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/

@@ -1,0 +1,11 @@
+# devenv project → profile mapping.
+# scripts/sync.sh and scripts/diff.sh resolve the profile from this file
+# (key = basename of the project directory).
+#
+# Add a project here once it has been migrated to a managed profile.
+
+projects:
+  Ardors-website: docs-first-web
+  schedule_app: docs-first-web
+  # lifeapp: pending — drift analysis required before adopting docs-first-web.
+  # jovin: pending — currently empty CLAUDE.md, decide profile after content review.
