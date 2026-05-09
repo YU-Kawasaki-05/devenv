@@ -2,6 +2,9 @@
 
 `~/develop/` 配下のプロジェクトに配布する agent 設定 (Claude / Codex / Copilot) の正本リポジトリ。
 
+> **新規メンバーの方へ**: まず [`docs/`](docs/) のマニュアルから読んでください。セットアップ手順や日々の使い方が日本語でまとまっています。
+> このファイル (README.md) は devenv 自体の仕組みリファレンスです。
+
 ## レイアウト
 
 ```
@@ -22,6 +25,7 @@ devenv/
 │   ├── _lib.sh                # 共有ヘルパー (resolve_profile / stage_template)
 │   ├── sync.sh                # templates/<profile>/ + overrides/<project>/ → 対象 (一方向)
 │   └── diff.sh                # 差分確認
+├── docs/                      # チーム向けマニュアル (新メンバーはまずここ)
 ├── manifest.yml               # プロジェクト名 → profile 対応
 ├── CLAUDE.md / AGENTS.md      # この repo の作業指示
 └── README.md
