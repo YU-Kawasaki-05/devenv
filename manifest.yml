@@ -18,6 +18,8 @@ projects:
   # --- managed with project-specific overrides ---
   lifeapp: docs-first-web        # overrides/lifeapp/ keeps category-1 files
   marubo_ai: docs-first-web      # overrides/marubo_ai/ keeps the project-specific CLAUDE.md
+  slide-gen: slide-kit           # overrides/slide-gen/BUILD.md carries PPTX-specific build/structure
+  slide-web: slide-kit           # overrides/slide-web/BUILD.md carries Slidev/HTML-specific build/structure
 
   # --- pending: B (will be managed once conditions are met) ---
   # jovin: docs-first-web        # CLAUDE.md is empty (0 lines) — re-evaluate when project takes shape

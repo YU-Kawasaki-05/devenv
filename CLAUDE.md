@@ -8,6 +8,7 @@
 
 ## Key Paths
 - `~/.claude/skills/` — 個人用 Claude Skills
+- `~/.claude/commands/` — 個人用グローバル Slash Commands（全プロジェクトで使えるプロンプト）
 - `~/.claude/CLAUDE.md` — 個人用グローバル指示
 - `.claude/skills/` — プロジェクト固有 Skills（このリポジトリ）
 - `.agents/skills/` — Codex 用 Skills（このリポジトリ）
@@ -16,6 +17,15 @@
 - `overrides/<project-name>/` — base 上に重ねるプロジェクト固有ファイル
 - `manifest.yml` — プロジェクト名 → profile の対応表
 - `scripts/sync.sh`, `scripts/diff.sh` — 配布・差分確認 (`scripts/_lib.sh` から共有関数を読む)
+
+## Slash Commands の配置方針
+| 種別 | 場所 | 用途 |
+|------|------|------|
+| 個人グローバル | `~/.claude/commands/<name>/` | 全プロジェクトで使いたいプロンプト（要件定義など） |
+| プロジェクト共通 | `templates/<profile>/.claude/commands/<name>/` | チーム全員が使うべきプロンプト（devenv 経由で配布） |
+| プロジェクト固有 | `overrides/<project>/.claude/commands/<name>/` | そのプロジェクトだけのプロンプト |
+
+現在の個人グローバルコマンド: `~/.claude/commands/要件定義/`（3 フェーズ: 要件定義・外部設計・技術設計）
 
 ## Templates / sync workflow
 - 各プロジェクトの `.codex/`, `.agents/skills/`, `CLAUDE.md`, `AGENTS.md` の真実源は `templates/<profile>/` に置く

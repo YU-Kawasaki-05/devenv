@@ -92,6 +92,8 @@ scripts/sync.sh ../some_other_repo --profile docs-first-web --dry-run
 | schedule_app | `docs-first-web` | なし |
 | lifeapp | `docs-first-web` | `overrides/lifeapp/` (CLAUDE.md, AGENTS.md, .codex/config.toml, .codex/hooks/check_bash_command.py, .agents/skills/backend-bugfix/scripts/verify.sh) |
 | marubo_ai | `docs-first-web` | `overrides/marubo_ai/` (CLAUDE.md のみ) |
+| slide-gen | `slide-kit` | `overrides/slide-gen/BUILD.md` (PPTX 固有のビルドコマンド・ディレクトリ構造) |
+| slide-web | `slide-kit` | `overrides/slide-web/BUILD.md` (Slidev 固有のビルドコマンド・ディレクトリ構造) |
 
 ## グローバル skills の慣習
 
