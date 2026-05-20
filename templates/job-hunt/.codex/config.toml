@@ -1,0 +1,31 @@
+model = "gpt-5.4"
+model_reasoning_effort = "medium"
+plan_mode_reasoning_effort = "high"
+model_reasoning_summary = "auto"
+model_verbosity = "medium"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "live"
+
+[sandbox_workspace_write]
+network_access = true
+
+project_doc_max_bytes = 65536
+project_doc_fallback_filenames = ["CLAUDE.md", ".agents.md"]
+project_root_markers = [".git", ".codex"]
+
+[features]
+codex_hooks = true
+
+[agents]
+max_threads = 4
+max_depth = 1
+
+[projects."{{PROJECT_PATH}}"]
+trust_level = "trusted"
+
+# Notion MCP（セットアップ後にコメントアウトを外す）
+# [mcp_servers.notion]
+# command = "npx"
+# args = ["-y", "@notionhq/notion-mcp-server"]
+# env = { OPENAPI_MCP_HEADERS = '{"Authorization": "Bearer <token>", "Notion-Version": "2022-06-28"}' }

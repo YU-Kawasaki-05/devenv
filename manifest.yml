@@ -20,6 +20,10 @@ projects:
   marubo_ai: docs-first-web      # overrides/marubo_ai/ keeps the project-specific CLAUDE.md
   slide-gen: slide-kit           # overrides/slide-gen/BUILD.md carries PPTX-specific build/structure
   slide-web: slide-kit           # overrides/slide-web/BUILD.md carries Slidev/HTML-specific build/structure
+  slide-web-new: slide-kit-reveal   # new reveal.js-based HTML slide skill; successor to slide-web
+
+  # --- job hunting ---
+  job-hunt: job-hunt                # personal job hunting workspace; standalone profile
 
   # --- pending: B (will be managed once conditions are met) ---
   # jovin: docs-first-web        # CLAUDE.md is empty (0 lines) — re-evaluate when project takes shape
