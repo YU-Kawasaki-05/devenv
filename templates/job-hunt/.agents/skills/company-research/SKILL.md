@@ -1,6 +1,6 @@
 ---
 name: company-research
-description: Use when the user wants to research a company for job hunting. Searches the web and saves structured results to companies/<path>/research.md. Trigger on "企業調べて", "〇〇会社の情報", "企業リサーチ", "会社について調べて".
+description: Use when the user wants to research a company for job hunting. Searches the web and saves structured results to companies/<path>/research.md. When no division is specified, reads self/ and recommends the best-fit division. Trigger on "企業調べて", "〇〇会社の情報", "企業リサーチ", "会社について調べて".
 ---
 
 # 企業リサーチ
@@ -8,6 +8,7 @@ description: Use when the user wants to research a company for job hunting. Sear
 ## Role
 
 企業情報をWebサーチで収集し、就活に必要な形で構造化・保存する。
+**部門が未指定の場合は `self/` を読んでフィット評価と部門レコメンドも行う。**
 
 ## When to use
 
@@ -29,21 +30,93 @@ description: Use when the user wants to research a company for job hunting. Sear
 | 単一エンティティ（部門不要） | `companies/<会社名>/` | `companies/LayerX/` |
 | グループ企業・複数部門に応募 | `companies/<グループ名>/<部門名>/` | `companies/PwC/コンサルティング/` |
 
-グループ企業の場合は `companies/<グループ名>/_overview.md` にグループ共通情報を置く（任意）。
+グループ企業は必ず `companies/<グループ名>/_overview.md` を作成する。
 
-## Process
+---
 
-1. ユーザーから企業名・業種・志望職種・部門（あれば）を確認
-2. **グループ/部門の判断**: 同一グループの複数部門に応募するか確認してパスを決定
-3. Web検索で以下を収集:
-   - 事業内容・主要サービス・競合との差別化
-   - 企業文化・バリュー・求める人物像（採用ページ重視）
-   - 直近のニュース・トピック・成長領域
-   - 採用情報（職種・待遇・選考フロー）
-4. `companies/<path>/` ディレクトリを作成（未存在の場合）
-5. `companies/<path>/research.md` に構造化して保存
-6. `companies/<path>/questions.md` が未作成なら空テンプレートを作成
-7. グループ企業かつ `_overview.md` 未作成なら `companies/<グループ名>/_overview.md` を作成
+## Mode A: 部門指定あり
+
+1. ユーザーから企業名・業種・志望職種・部門を確認
+2. Web検索で事業内容・企業文化・求める人物像・採用情報・直近ニュースを収集
+3. `companies/<path>/research.md` に構造化して保存
+4. `companies/<path>/questions.md` が未作成なら空テンプレートを作成
+5. グループ企業かつ `_overview.md` 未作成なら作成
+
+---
+
+## Mode B: 部門未指定（メイン）
+
+### Step 1: self/ を読む（必須）
+
+以下を全て読む:
+- `self/profile.md` — 基本情報・志望業界・キャリア観
+- `self/strengths.md` — 強み・弱み・価値観
+- `self/pr_templates.md` — 自己PR・ガクチカ
+- `self/experiences/` — 全経験ファイル（001〜）
+
+### Step 2: 企業・部門構造の調査
+
+Web 検索で以下を収集:
+- グループ全体の事業領域・部門一覧
+- 各部門の役割・特徴・採用職種
+- 企業文化・求める人物像（採用ページ重視）
+- 直近のニュース・トピック
+
+### Step 3: フィット評価
+
+各部門を ★★★ / ★★ / ★ で評価:
+
+| 評価軸 | 内容 |
+|--------|------|
+| 経験マッチ | 過去の経験・スキルとの重なり |
+| 強みマッチ | strengths.md の強みが活きるか |
+| 志望軸マッチ | profile.md の「企業選びの軸」との整合 |
+| 成長機会 | キャリアゴールに向けた学習・成長が得られるか |
+
+### Step 4: ファイル保存
+
+1. `companies/<グループ名>/_overview.md` を作成（フィット評価・レコメンドを含む）
+2. 推奨部門（★★★）の `research.md` を作成
+3. 推奨部門の `questions.md` を空テンプレートで作成
+
+---
+
+## Output format: companies/<グループ名>/_overview.md
+
+```markdown
+# グループ概要: <グループ名>
+
+調査日: YYYY-MM-DD
+
+## グループ基本情報
+
+| 項目 | 内容 |
+|------|------|
+| 業種 | |
+| 規模（連結従業員数） | |
+| 上場区分 | |
+| 主要事業 | |
+
+## 事業構造・部門一覧
+
+（グループ全体のビジネス構造・各部門の役割を記述）
+
+## あなたへの部門レコメンド
+
+| 部門名 | フィット | 理由（経験・強み・志望軸との接点） |
+|--------|---------|----------------------------------|
+| <部門A> | ★★★ | |
+| <部門B> | ★★ | |
+| <部門C> | ★ | |
+
+### おすすめ: <部門名>
+
+（推薦理由を3〜5文で。self/ の具体的な経験・強みを引用して根拠を示す）
+
+## 注意・気になる点
+
+（複数部門への応募可否、選考時期の重複など）
+```
 
 ## Output format: companies/<path>/research.md
 
@@ -88,7 +161,7 @@ description: Use when the user wants to research a company for job hunting. Sear
 
 ## 志望度・気になる点
 
-（自分の感想・深掘りしたい疑問）
+（調査して感じたこと・深掘りしたい疑問）
 ```
 
 ## Output format: companies/<path>/questions.md
