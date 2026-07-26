@@ -22,6 +22,19 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+# --- Codex CLI ---
+# VS Code の ChatGPT 拡張に同梱されているバイナリを直接呼ぶ (WSL 側 .bash_aliases と同じ方式)。
+# Mac は拡張が ~/.vscode/extensions にあり、バイナリも darwin-arm64 になる点が WSL と異なる。
+codex() {
+  local codex_bin
+  codex_bin="$(find "$HOME/.vscode/extensions" -path '*/bin/darwin-arm64/codex' -type f -perm -u+x 2>/dev/null | sort -V | tail -n 1)"
+  if [ -z "$codex_bin" ]; then
+    echo "codex CLI が見つかりません。VS Code の ChatGPT 拡張 (openai.chatgpt) を入れてください" >&2
+    return 127
+  fi
+  "$codex_bin" "$@"
+}
+
 # --- SSH ---
 # macOS は ssh-agent + Keychain が OS 統合されているため WSL のような自動起動スクリプトは不要。
 # 初回に一度だけ以下を実行すれば以後は自動でロードされる:

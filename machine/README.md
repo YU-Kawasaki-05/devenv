@@ -9,6 +9,8 @@ machine/
 ├── setup-mac.sh       # Mac: 環境セットアップ (冪等)
 ├── link-claude.sh     # WSL/Mac 共通: ~/.claude, ~/.agents を devenv 正本へ symlink
 ├── clone-repos.sh     # 全リポジトリ clone (冪等)
+├── vscode-extensions.txt        # VS Code 拡張機能リスト (23 個)
+├── install-vscode-extensions.sh # 上記を一括インストール (冪等)
 ├── MIGRATION.md       # WSL → Mac 移行手順書
 ├── dotfiles/
 │   ├── zshrc              # → ~/.zshrc (Mac)
@@ -44,3 +46,8 @@ Mac は zsh なので `dotfiles/zshrc` を使う。共通化したい設定は�
 - `settings.json` は Claude Code が動的に書き換えるため symlink 管理しない。
   共通化したい設定が増えたら `settings.template.json` に反映する。
 - 新しいツールを入れたら `Brewfile` にも追記する。
+- VS Code 拡張を増やしたら `vscode-extensions.txt` にも 1 行足す
+  (`code --list-extensions` で上書きするとカテゴリのコメントが消えるので注意)。
+- `codex` コマンドは VS Code の ChatGPT 拡張に同梱されたバイナリを直接呼んでいる。
+  WSL は `~/.vscode-server/.../bin/linux-x86_64/codex` (`.bash_aliases`)、
+  Mac は `~/.vscode/.../bin/darwin-arm64/codex` (`dotfiles/zshrc`) とパスが異なる。

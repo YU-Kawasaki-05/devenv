@@ -1,0 +1,43 @@
+# VS Code 拡張機能リスト
+#
+# 一括インストール:
+#   bash ~/develop/devenv/machine/install-vscode-extensions.sh
+#
+# 現在の一覧を書き出して更新:
+#   code --list-extensions > ~/develop/devenv/machine/vscode-extensions.txt
+#   (このコメントは消えるので、必要なら書き戻す)
+
+# ── 必須 ─────────────────────────────────
+anthropic.claude-code
+openai.chatgpt
+ms-ceintl.vscode-language-pack-ja
+
+# ── Web 開発 (Next.js / React / TS / Tailwind) ──
+dbaeumer.vscode-eslint
+esbenp.prettier-vscode
+bradlc.vscode-tailwindcss
+vitest.explorer
+ms-playwright.playwright
+
+# ── Python (job-hunt tools, univ scripts) ──
+ms-python.python
+ms-python.vscode-pylance
+charliermarsh.ruff
+
+# ── ドキュメント・図 ─────────────────────
+bierner.markdown-mermaid
+hediet.vscode-drawio
+redhat.vscode-yaml
+tamasfe.even-better-toml
+mikestead.dotenv
+
+# ── スライド・文書生成 ───────────────────
+james-yu.latex-workshop
+marp-team.marp-vscode
+corotata.pptx-preview
+muhammad-ahmad.xlsx-viewer
+ms-vscode.live-server
+
+# ── git / CI ─────────────────────────────
+eamodio.gitlens
+github.vscode-github-actions

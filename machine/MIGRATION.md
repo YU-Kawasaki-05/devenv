@@ -45,7 +45,42 @@ xcode-select --install
 ダイアログが出るので「インストール」をクリック。5〜10 分待ちます。
 「既にインストールされています」と言われたらそのまま次へ。
 
-確認:
+### `install requested for command line developer tools` と出て止まった場合
+
+**これは正常なメッセージです。** このコマンドは「インストールを要求した」と表示して
+**すぐプロンプトに戻る**設計で、実際の作業は別に出る GUI ダイアログが担当します。
+ターミナル側は何も進みません。
+
+まず入っているか確認:
+
+```sh
+xcode-select -p
+```
+
+`/Library/Developer/CommandLineTools` と出れば**もう入っています**。次へ進んでください。
+
+`error: unable to find utility` なら未インストールなので、ダイアログを探します。
+他のウィンドウの裏や別のデスクトップに隠れがちなので、`F3`（Mission Control）や
+Dock に増えたアイコンを確認してください。
+
+ダイアログが見つからないときは、ターミナルだけで入れられます:
+
+```sh
+softwareupdate --list
+```
+
+`Command Line Tools for Xcode-16.x` のような項目が出るので、その名前をそのまま指定:
+
+```sh
+sudo softwareupdate --install "Command Line Tools for Xcode-16.2"
+```
+
+（`16.2` は `--list` で出た実際の名前に合わせる）
+
+**それでも面倒なら、この章は飛ばして構いません。**
+次の章の Homebrew インストーラが Command Line Tools を自動で入れてくれます。
+
+### 確認
 
 ```sh
 git --version
@@ -231,6 +266,31 @@ pnpm install
 
 ---
 
+## 5b. VS Code の拡張機能を入れる
+
+まず VS Code から `code` コマンドを使えるようにします。
+VS Code を起動して `Command + Shift + P` → `Shell Command: Install 'code' command in PATH` を実行。
+
+そのあとターミナルで:
+
+```sh
+bash ~/develop/devenv/machine/install-vscode-extensions.sh
+```
+
+`machine/vscode-extensions.txt` に書かれた 23 個が入ります（既に入っているものは `skip` と出て飛ばされます）。
+入れ終わったら VS Code を再起動してください。
+
+拡張を増やしたら、リストも更新しておくと次のマシンで再現できます:
+
+```sh
+code --list-extensions > ~/develop/devenv/machine/vscode-extensions.txt
+```
+
+> ⚠️ 上のコマンドはファイル内のコメント（カテゴリ分けの見出し）を消してしまいます。
+> 分類を残したい場合は `vscode-extensions.txt` を直接編集して 1 行足してください。
+
+---
+
 ## 6. GitHub 経由で移せないもの
 
 | 対象 | なぜ | どうする |
@@ -324,7 +384,11 @@ gh auth status                                   # ✓ が 2 つ
 claude                                           # 起動して /pr-review 等の skill が 16 個見える
 git -C ~/develop/premake pull                    # SSH でエラーなく通る
 latexmk --version                                # TeX（Brewfile で texlive を入れた場合）
+codex --version                                  # ChatGPT 拡張のインストール後に有効になる
 ```
+
+> `codex` は VS Code の ChatGPT 拡張に同梱されたバイナリを直接呼ぶ仕組み（`.zshrc` で定義）。
+> 5b の拡張機能インストールが済んでいないと `codex CLI が見つかりません` になります。
 
 **git のメールアドレスがフォルダによって自動で切り替わる**のがポイントです。
 `~/develop/rio/` と `evs-...` の中だけ仕事用のアドレスになります（`.gitconfig` の
