@@ -17,6 +17,9 @@ Read both files before suggesting edits.
 - One message per slide; if a suggestion would put two messages on one slide, split into two
 - Match the existing manuscript style — do not introduce new schema fields, layouts, or themes without explicit instruction
 - Do not auto-suggest decorative elements (gradients, shadows, extra icons, multiple accent colors)
+- If the project has profile / pattern references, suggest changes that use existing profiles, patterns, classes, and theme tokens
+- Do not invent slide counts; preserve the manuscript's information density and split only when one slide has multiple messages
+- For branded decks, use existing brand variables/assets only; do not guess logo treatment or brand colors
 
 ## What to avoid suggesting
 
@@ -24,3 +27,5 @@ Read both files before suggesting edits.
 - Coordinate/pixel/font-size literals in manuscripts
 - "Cleanup" refactors of theme files unless asked
 - New dependencies — flag them for human review instead
+- One-off CSS classes in manuscripts when an existing pattern class fits
+- Rewriting a deck into a different profile unless the user asks

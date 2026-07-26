@@ -12,6 +12,7 @@ Project-specific build commands and file layout live in `BUILD.md` (read it befo
 ## Absolute rules (all slide-kit projects)
 
 - **AIに座標を考えさせない**。スライドは必ず定義済みレイアウト／テーマから組み立てる。
+- **資料タイプを先に決める**。profile / layout catalog / pattern catalog がある場合は、作成前に用途に合うものを選ぶ。
 - **1スライド1メッセージ**。詰め込み禁止、迷ったら分割する。
 - **テキスト量の上限を守る**。違反した時点で分割または要約。
   - 本文: 最大5行
@@ -22,6 +23,7 @@ Project-specific build commands and file layout live in `BUILD.md` (read it befo
 - **強調色は1色のみ**（accent color）。複数色での装飾は禁止。
 - **装飾より情報設計を優先**。グラデ／影／過剰アイコンは AI 臭の原因。
 - **テキストは safe ラッパー経由で渡す**（safeText / safeBullets 等、プロジェクトごとに定義）。
+- **枚数は固定しない**。情報量、発表時間、配布用か投影用かに応じて、統合・分割・appendix 化を判断する。
 
 ## Design direction
 
@@ -38,11 +40,13 @@ Project-specific build commands and file layout live in `BUILD.md` (read it befo
    - 対象読者・ゴール・おおよその枚数・トーン（executive / technical / casual）
 2. **アウトライン作成**
    - ストーリーラインを整理してから部品を選ぶ
+   - profile / pattern が定義されている場合は、先に該当 reference を読む
 3. **スライド原稿の作成**
    - プロジェクト固有のスキーマで原稿を書く（YAML or Markdown、`BUILD.md` 参照）
 4. **生成 & 検証**
    - プロジェクト固有のビルドコマンドを実行（`BUILD.md` 参照）
    - 検証エラーが出たら原稿を修正して再生成、PPTX/HTMLの直接編集はしない
+   - HTML/PDF 系は目視確認を前提にし、文字あふれ、箇条書き連続、profile 逸脱を直す
 5. **修正対応**
    - 原稿（YAML / Markdown）を直接編集して再生成。出力ファイルを直接編集しない。
 
@@ -62,6 +66,7 @@ Project-specific build commands and file layout live in `BUILD.md` (read it befo
 - 出力ファイル (`.pptx` / `.html`) を直接編集する
 - 座標やピクセル値を原稿に書く
 - AI が新しい配色・フォント・装飾を勝手に追加する
+- AI が profile / pattern を無視して、その場限りの構成を作る
 - 1スライドに複数メッセージを詰める
 - 表が画面に収まらないまま放置する
 - ブランドガイドにない色を「アクセント」と称して導入する
@@ -78,4 +83,5 @@ Project-specific build commands and file layout live in `BUILD.md` (read it befo
 - ビルド／プレビュー／検証コマンド
 - ディレクトリ構造とファイル命名規則
 - 原稿スキーマの参照先
+- profile / pattern / brand の有無と使い方
 - そのプロジェクト固有の制限・拡張ポイント

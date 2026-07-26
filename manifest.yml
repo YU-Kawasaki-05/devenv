@@ -22,13 +22,11 @@ projects:
   slide-web: slide-kit           # overrides/slide-web/BUILD.md carries Slidev/HTML-specific build/structure
   slide-web-new: slide-kit-reveal   # new reveal.js-based HTML slide skill; successor to slide-web
 
-  # --- job hunting ---
-  job-hunt: job-hunt                # personal job hunting workspace; standalone profile
-
   # --- pending: B (will be managed once conditions are met) ---
   # jovin: docs-first-web        # CLAUDE.md is empty (0 lines) — re-evaluate when project takes shape
 
   # --- out of scope: C (intentionally not managed) ---
+  # job-hunt                               — single-project profile; git-managed directly. devenv overhead > value. removed 2026-06-23.
   # evs-AI-basedTestSpecificationCreation  — separate large multi-subproject system; doesn't fit docs-first-web profile
   # univ                                   — personal academic notes; not an app project
   # marubo_forPractice                     — sandbox/practice repo
