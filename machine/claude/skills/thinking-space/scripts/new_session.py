@@ -12,7 +12,7 @@ Scaffold a new Thinking Space session and register it in the hub.
   entry; the renderer fills tags/verdicts).
 
 Usage:
-  new_session.py --slug premake-pivot --date 2026-06-28 --title "premake — 何に賭けるか" \
+  new_session.py --slug pricing-pivot --date 2026-06-28 --title "料金体系 — どこに賭けるか" \
                  --summary "一文要約" [--space ~/develop/thinking-space] \
                  [--eyebrow "意思決定レビュー · Decision-Grade"] [--process "kill-or-pivot → decision-grade"] \
                  [--confidence Medium] [--force] [--no-register]
@@ -84,7 +84,7 @@ def register_in_hub(hub_path: Path, date: str, title: str, href: str, summary: s
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Scaffold a Thinking Space session.")
-    ap.add_argument("--slug", required=True, help="kebab-case slug (e.g. premake-pivot)")
+    ap.add_argument("--slug", required=True, help="kebab-case slug (e.g. pricing-pivot)")
     ap.add_argument("--date", required=True, help="YYYY-MM-DD (pass today's date explicitly)")
     ap.add_argument("--title", required=True)
     ap.add_argument("--summary", default="")
