@@ -22,6 +22,21 @@ machine/
     └── settings.template.json  # settings.json の初期値 (symlink せずコピー)
 ```
 
+## WSL 側もこの正本を参照している
+
+移行元の WSL2 環境も以下を devenv への symlink に切り替えてあるので、
+**設定はどちらのマシンで編集しても同じ正本に入る**:
+
+| リンク元 | 正本 |
+|---|---|
+| `~/.claude/skills`, `~/.agents/skills` | `machine/claude/skills` |
+| `~/.claude/commands` | `machine/claude/commands` |
+| `~/.claude/CLAUDE.md` | `machine/claude/CLAUDE.md` |
+| `~/.gitconfig`, `~/.gitconfig-fouryou` | `machine/dotfiles/gitconfig*` |
+
+WSL のシェルは bash のまま (`~/.bashrc` は symlink 化していない)。
+Mac は zsh なので `dotfiles/zshrc` を使う。共通化したい設定は両方に書く。
+
 ## 運用ルール
 
 - **skill や CLAUDE.md を変更したいときは devenv 側 (ここ) を編集**する。
