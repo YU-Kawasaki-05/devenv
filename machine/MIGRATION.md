@@ -13,9 +13,25 @@ WSL2 (Ubuntu 22.04) の開発環境を Mac に再現するための手順書。
 | git 設定 (2 identity) | `dotfiles/gitconfig` + `gitconfig-fouryou` (includeIf で自動切替) |
 | SSH 設定 | `dotfiles/ssh_config` (鍵本体は手動コピー) |
 | Claude Code 設定 | `claude/` (skills / commands / CLAUDE.md を symlink 配布) |
-| リポジトリ | `clone-repos.sh` で GitHub から clone |
+| リポジトリ (18 個) | `clone-repos.sh` で GitHub から clone |
 | rio 直下の作業ファイル | **tar で手動転送 (機密のため GitHub 経由禁止)** |
+| univ (大学資料 3.2GB) | **tar で手動転送 (GitHub の 100MB 制限超のため)** |
 | ~/.aws, ~/.supabase, ~/.codex | 手動コピー (秘密情報を含む) |
+
+### リポジトリの public / private 方針
+
+スライドツール群は「仕組み」と「生成物」を分離してある:
+
+| repo | 可視性 | 内容 |
+|---|---|---|
+| `slide-gen` / `slide-web` / `slide-web-new` / `atcoder` | public | ツール・デザインシステム・テンプレート |
+| `slide-web-new-decks` | **private** | 生成した deck (事業情報・クライアント言及を含む) |
+| `thinking-space` | **private** | 意思決定ログ (事業戦略) |
+| `job-hunt` / `wit` | private | 就活・リサーチ |
+
+`slide-web-new/decks/` は親 repo が gitignore した**入れ子 repo**。
+パスを変えずに公開範囲だけ分離するための構成なので、clone 時は親と子の両方が必要
+(`clone-repos.sh` が両方 clone する)。deck を追加したら `decks/` 側で別途 commit すること。
 
 ## 手順
 
@@ -92,6 +108,22 @@ cd ~/develop && tar xzf rio-work.tar.gz && rm rio-work.tar.gz
 ```
 
 worktrees/ は Mac 側で `git worktree add` し直す方が安全。
+
+### 6b. univ (大学資料) を tar 転送
+
+3.2GB あり、271MB の pptx が GitHub の 100MB 制限を超えるため GitHub には置けない。
+外部ドライブか同一 LAN の scp で転送する:
+
+```sh
+# WSL 側 — node_modules と .git を除けば約 2GB
+cd ~/develop && tar czf univ.tar.gz --exclude='node_modules' univ/
+# Mac 側
+cd ~/develop && tar xzf univ.tar.gz && rm univ.tar.gz
+```
+
+GitHub の `YU-Kawasaki-05/univ` (private) は空のまま存在する。
+今後 GitHub で管理したい場合は大きい講義資料を除外した `.gitignore` を作り、
+`git filter-repo` で履歴から 100MB 超のオブジェクトを落とす必要がある。
 
 ### 7. その他の秘密情報 (必要になったタイミングでよい)
 
