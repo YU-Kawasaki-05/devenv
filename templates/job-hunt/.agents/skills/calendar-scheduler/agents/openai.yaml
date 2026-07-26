@@ -1,0 +1,6 @@
+interface:
+  display_name: "Calendar Scheduler"
+  short_description: "予定・締切をCalendarへ安全に同期する"
+  default_prompt: "Use $calendar-scheduler to register deadlines, meetings, classes, or job-hunt events in Google Calendar with safe reminders and local rollup when applicable."
+policy:
+  allow_implicit_invocation: true
