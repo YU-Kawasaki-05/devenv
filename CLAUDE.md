@@ -7,9 +7,11 @@
 - Claude Code / Codex / GitHub Copilot の設定を集約する場所
 
 ## Key Paths
-- `~/.claude/skills/` — 個人用 Claude Skills
-- `~/.claude/commands/` — 個人用グローバル Slash Commands（全プロジェクトで使えるプロンプト）
-- `~/.claude/CLAUDE.md` — 個人用グローバル指示
+- `machine/` — **マシン環境の正本**（dotfiles / Brewfile / Mac セットアップ / Claude ユーザー設定）。詳細は `machine/README.md`
+- `~/.claude/skills/` — 個人用 Claude Skills → **`machine/claude/skills/` への symlink**
+- `~/.claude/commands/` — 個人用グローバル Slash Commands → **`machine/claude/commands/` への symlink**
+- `~/.claude/CLAUDE.md` — 個人用グローバル指示 → **`machine/claude/CLAUDE.md` への symlink**
+- `~/.gitconfig`, `~/.gitconfig-fouryou` — → **`machine/dotfiles/` への symlink**
 - `.claude/skills/` — プロジェクト固有 Skills（このリポジトリ）
 - `.agents/skills/` — Codex 用 Skills（このリポジトリ）
 - `.github/skills/` — GitHub Copilot 用 Skills（このリポジトリ）
@@ -25,7 +27,7 @@
 | プロジェクト共通 | `templates/<profile>/.claude/commands/<name>/` | チーム全員が使うべきプロンプト（devenv 経由で配布） |
 | プロジェクト固有 | `overrides/<project>/.claude/commands/<name>/` | そのプロジェクトだけのプロンプト |
 
-現在の個人グローバルコマンド: `~/.claude/commands/要件定義/`（3 フェーズ: 要件定義・外部設計・技術設計）
+現在の個人グローバルコマンド: `machine/claude/commands/要件定義/`（v2・8 ファイル: 要件定義 / 外部設計 / 技術設計 / 整合性チェック / doc 生成 2 種 / 変更リクエスト / README）
 
 ## Templates / sync workflow
 - 各プロジェクトの `.codex/`, `.agents/skills/`, `CLAUDE.md`, `AGENTS.md` の真実源は `templates/<profile>/` に置く
@@ -35,6 +37,9 @@
 
 ## Rules
 - このリポジトリの変更は環境全体に影響する。慎重に変更する
+- **このリポジトリは public**。使用例やドキュメントに実案件名・クライアント名・事業数値を書かない
+- `machine/claude/` 以下は WSL / Mac 両方の `~/.claude/` から symlink で参照されている。
+  ここを編集すると即座に両マシンの Claude Code の挙動が変わる（要 commit & push で同期）
 - Skills を追加する際は既存パターンに合わせた SKILL.md を作成する
 - scripts/ に実行スクリプトを追加するときは必ず内容を確認してから実行する
 - `templates/` を編集したらすぐに sync しない。まず `--dry-run` と `diff.sh` で影響範囲を確認する
