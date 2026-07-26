@@ -1,0 +1,20 @@
+# ~/.gitconfig — devenv/machine/dotfiles/gitconfig の symlink (正本は devenv で管理)
+[user]
+	name = YU-Kawasaki-05
+	email = yuu.kw5.sea@gmail.com
+
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
+
+# 仕事 (FourYou) のリポジトリでは identity を切り替える
+[includeIf "gitdir:~/develop/rio/"]
+	path = ~/.gitconfig-fouryou
+[includeIf "gitdir:~/develop/evs-AI-basedTestSpecificationCreation/"]
+	path = ~/.gitconfig-fouryou
+
+[init]
+	defaultBranch = main

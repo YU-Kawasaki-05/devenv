@@ -1,0 +1,38 @@
+{
+  "language": "japanese",
+  "effortLevel": "xhigh",
+  "tui": "fullscreen",
+  "theme": "dark-ansi",
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "voiceEnabled": true,
+  "switchModelsOnFlag": true,
+  "skipDangerousModePermissionPrompt": true,
+  "model": "claude-fable-5[1m]",
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git fetch:*)",
+      "Bash(gh auth status*)",
+      "Bash(pnpm install*)",
+      "Bash(pnpm dev*)",
+      "Bash(pnpm build*)",
+      "Bash(pnpm lint*)",
+      "Bash(pnpm typecheck*)",
+      "Bash(pnpm test*)",
+      "Bash(npx vitest*)",
+      "Bash(npm list *)"
+    ]
+  }
+}

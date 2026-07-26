@@ -1,0 +1,32 @@
+# machine/Brewfile — Mac 開発環境の一括インストール定義
+# 使い方: brew bundle --file=~/develop/devenv/machine/Brewfile
+
+# --- 基本 CLI ---
+brew "git"
+brew "gh"          # GitHub CLI (git credential helper としても使用)
+brew "jq"
+brew "wget"
+brew "ripgrep"     # 高速 grep (rg) — Claude Code も利用
+brew "fd"          # 高速 find
+brew "mise"        # ランタイムバージョン管理 (nvm 代替。Node/Python 等を一元管理)
+brew "pnpm"
+
+# --- メディア・ドキュメント処理 ---
+brew "ffmpeg"
+brew "pandoc"
+brew "poppler"     # pdftotext 等 (Ubuntu の poppler-utils 相当)
+brew "sox"
+
+# --- TeX (日本語スライド・文書用) ---
+# texlive は全部入り (~5GB)。ディスクを節約したい場合はコメントアウトして
+# `brew install --cask basictex` + tlmgr で必要パッケージのみ入れる方法もある。
+brew "texlive"
+
+# --- GUI アプリ ---
+cask "docker-desktop"        # 軽量代替が良ければ cask "orbstack" に変更可
+cask "visual-studio-code"
+
+# --- 日本語フォント (スライド・PDF 生成用) ---
+cask "font-noto-sans-cjk-jp"
+cask "font-noto-serif-cjk-jp"
+cask "font-ipafont"

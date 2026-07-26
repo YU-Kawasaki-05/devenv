@@ -1,0 +1,32 @@
+# ~/.zshrc — devenv/machine/dotfiles/zshrc の symlink (正本は devenv で管理)
+
+# --- Homebrew ---
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# --- mise (Node 等のバージョン管理) ---
+eval "$(mise activate zsh)"
+
+# --- History ---
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=50000
+setopt share_history          # 端末間でヒストリー共有
+setopt hist_ignore_all_dups   # 重複を残さない
+setopt hist_ignore_space      # 先頭スペースのコマンドは記録しない
+
+# --- Completion ---
+autoload -Uz compinit && compinit
+
+# --- Aliases ---
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# --- SSH ---
+# macOS は ssh-agent + Keychain が OS 統合されているため WSL のような自動起動スクリプトは不要。
+# 初回に一度だけ以下を実行すれば以後は自動でロードされる:
+#   ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+#   ssh-add --apple-use-keychain ~/.ssh/id_ed25519_fouryou
+
+# --- ローカル環境固有の設定 (git 管理外) ---
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local

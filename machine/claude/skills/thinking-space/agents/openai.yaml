@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking Space"
+  short_description: "Render finished thinking into HTML logs"
+  default_prompt: "Use $thinking-space to turn this analysis into an HTML decision log under develop/thinking-space."

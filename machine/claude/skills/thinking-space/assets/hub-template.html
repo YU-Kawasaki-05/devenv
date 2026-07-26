@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thinking Space — 意思決定の思考ログ</title>
+<meta name="description" content="戦略・事業判断の思考を、振り返れる形で残す個人の思考ログ。">
+<link rel="stylesheet" href="assets/theme.css">
+</head>
+<body>
+<button class="theme-toggle" aria-label="テーマ切替">☾</button>
+
+<header class="wrap hub-hero">
+  <p class="eyebrow">Thinking Space</p>
+  <h1>意思決定の思考ログ</h1>
+  <p class="lede">戦略・事業判断を「結論」だけでなく「なぜそう判断したか」ごと残す。後から振り返り、前提が変わったら更新する場所。</p>
+
+  <div class="controls">
+    <label class="search">
+      <span class="ic">⌕</span>
+      <input id="search-input" type="search" placeholder="タイトル・要約・タグで検索…" aria-label="検索">
+    </label>
+    <div class="tagbar" id="tagbar" aria-label="タグで絞り込み"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="session-list" id="session-list">
+    <div class="empty">読み込み中… JavaScript が無効の場合は <code>sessions/</code> 内の各 <code>index.html</code> を直接開いてください。</div>
+  </div>
+
+  <div class="hub-note">
+    <strong>新しいセッションの足し方：</strong>
+    ① <code>sessions/YYYY-MM-DD_スラッグ/index.html</code> を作る。
+    ② 下部の <code>THINKING_SESSIONS</code> 配列に1件追加する。カード・検索・タグに自動反映される。
+  </div>
+</main>
+
+<footer class="wrap foot">
+  <p>Thinking Space · 共有デザインは <code>assets/theme.css</code> / <code>assets/app.js</code> の1箇所で管理。<code>file://</code> で直接開いても動作する自己完結構成。</p>
+</footer>
+
+<script>
+/* ===========================================================
+   セッション台帳 — 新規はここに1件追加（新しい日付が上に来る）
+   kind: "go" | "warn" | "kill" | "neutral"
+   =========================================================== */
+window.THINKING_SESSIONS = [
+  /* 新規はこの直後に1件追加（new_session.py が自動挿入。手動追加も可） */
+  /* <<NEW_SESSIONS>> */
+];
+</script>
+<script src="assets/app.js"></script>
+</body>
+</html>

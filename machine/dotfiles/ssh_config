@@ -1,0 +1,29 @@
+# ~/.ssh/config — devenv/machine/dotfiles/ssh_config からコピー (symlink 不可: パーミッション要件のため)
+# macOS 専用オプション (UseKeychain) は Linux では無視される
+IgnoreUnknown UseKeychain
+
+# === GitHub: YU-Kawasaki-05 (personal / marubo_ai) ===
+Host github.com-05
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
+  AddKeysToAgent yes
+  UseKeychain yes
+
+# === GitHub: yu-kawasaki-fouryou (work) ===
+Host github.com-fouryou
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_fouryou
+  IdentitiesOnly yes
+  AddKeysToAgent yes
+  UseKeychain yes
+
+# デフォルトの github.com は個人鍵を使用
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519
+  AddKeysToAgent yes
+  UseKeychain yes
